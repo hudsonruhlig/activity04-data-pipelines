@@ -1,6 +1,6 @@
 ---
 title: "Activity 4"
-author: "Name"
+author: "Hudson Ruhlig"
 output: github_document
 ---
 
@@ -34,6 +34,9 @@ Now, switch this option to `message = TRUE` and knit your report again.
 Discuss what is different when the `message` option is turned on (`TRUE`) and turned off (`FALSE`) for the previous code chunk.
 
 **Response**:
+
+When using 'message = FALSE' knitting the documment provides an easier document to read for reporting, as when
+'message = TRUE' the few conflicts found when importing the tidyverse are also shown in the knitted report.
 
 
 Turn the `message` option off and continue in this activity.
@@ -79,6 +82,7 @@ Explore and describe what the `message` option does in `load_data` code chunk.
 
 **Response**:
 
+Similarly as before, turing the mmessage option off with 'message = FALSE' the knitted documment removes the console output of the code chuck for a more readable document.
 
 Turn the `message` option off and continue in this activity.
 
@@ -121,8 +125,8 @@ Below is a blank R code chunk.
 Name this code chunk `college_grads_top`; you do not need to suppress messages.
 In this code chunk, type `college_recent_grads` to view the top few (first 10) entries of the dataset.
 
-```{r}
-
+```{r college_grads_top}
+college_recent_grads
 ```
 
 
@@ -178,6 +182,9 @@ As you write this process, think of it as a series of steps and it might be help
 
 **Response**:
 
+To answer the question of lowest unemployment rate we would need the variable `unemployment_rate`.
+Looking at the data from `unemployment_rate`, first we would want to arrange the data in ascending order by the unemployment rate of college majors. This would give the top major result of with the lowest unemployment rate from the dataset `college_recent_grads`. 
+
 
 #### Using `{dplyr}`
 
@@ -185,8 +192,9 @@ In the R code chunk below, name it `rearrange_college`.
 
 Take the `college_recent_grads` dataset, *then* `arrange` the dataset by `unemployment_rate`.
 
-```{r}
-
+```{r rearrange_college}
+college_recent_grads %>%
+  arrange(unemployment_rate)
 ```
 
 We have all of the information to answer our question (i.e., "Which major has the lowest unemployment rate?"), but it is not in an effective format.
@@ -198,12 +206,15 @@ Also, notice that by default when you *arrange* by a variable, it defaults to *a
 Use the pipeline that you made in the `rearrange_college` code chunk as the start to this solution, **then** `select` only the variables `rank`, `major`, and `unemployment_rate`.
 Name this code chunk `lowest_unemploy`.
 
-```{r}
-
+```{r lowest_unemploy}
+college_recent_grads %>%
+  arrange(unemployment_rate) %>%
+  select(rank, major, unemployment_rate)
 ```
 
 **Response**:
 
+The major with the lowest unemployment rate is Mathematics and Computer Science. This major is tied at 0 with Military Technologies, Botany, Soil Science, and Educational Administration and Supervision, respectively.
 
 ![](README-img/noun_pause.png) **Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
 
@@ -212,14 +223,17 @@ Name this code chunk `lowest_unemploy`.
 Using the `college_recent_grads` dataset and functions from `{dplyr}`, `arrange` the dataset by `sharewomen`, and `select` only `rank`, `major`, and `sharewomen`. 
 Name your code chunk `highest_prop_women`.
 
-```{r}
-
+```{r highest_prop_women}
+college_recent_grads %>%
+  arrange(desc(sharewomen)) %>%
+  select(rank, major, sharewomen)
 ```
 
 Discuss your output as it relates to the research question.
 
 **Response**:
 
+The major with the highest proportion of women from the dataset college_recent_grads is shown to be Early Childhood Education, which was found by arranging the dataset in descending order by the variable sharewomen.
 
 ![](README-img/noun_pause.png) **Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
 
@@ -243,14 +257,22 @@ Using the `stem_categories` vector and knowledge that the median salary for all 
 Only display the variables `major`, `p25th`, `median`, and `p75th`
 Name the code chunk `stem_low_salaries`.
 
-```{r}
-
+```{r stem_low_salaries}
+college_recent_grads %>%
+  # Need to learn how to use the vector to 
+  # compare strings in boolean operations
+  filter(major %in% c("Biology & Life Science",
+                     "Computers & Mathematics",
+                     "Engineering",
+                     "Physical Sciences"), median < 36000) %>%
+  select(major, p25th, median, p75th)
 ```
 
 Discuss your output as it relates to the research question.
 
 **Response**:
 
+Based on the results given (0) there is not a single STEM category that falls below the median incom of college majors.
 
 ![](README-img/noun_pause.png) **(Final) Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
 
